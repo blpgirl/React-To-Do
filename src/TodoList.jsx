@@ -12,8 +12,23 @@ class TodoList extends React.Component {
                     { id: 3, text: "Item 3", done: false},
                     { id: 4, text: "Item 4", done: false}
                   ]
-                }
-    }
+                };
+
+        this.newTodo = this.newTodo.bind(this);
+    } // constructor
+
+  newTodo(event){
+    event.preventDefault();
+
+    var todos = this.state.todos;
+    
+    // push a new empty object to the array of ToDos
+    todos.push({ id: "" });
+
+    this.setState(state => ({
+      todos: todos
+    }));
+  } // newTodo
 
   render(){
     const todoList = this.state.todos.map((todo) =>
@@ -24,6 +39,8 @@ class TodoList extends React.Component {
             <h1>React To-do App</h1>
 
             {todoList}
+
+            <a href="#" onClick={this.newTodo}>New Todo</a>
           </React.Fragment>
   } // render
 } // class

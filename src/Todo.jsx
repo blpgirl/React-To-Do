@@ -6,7 +6,7 @@ class Todo extends React.Component {
       super(props);
 
       // set done attribute and text attribute pass down
-      this.state = { done: (this.props.done == "true" && props.done),
+      this.state = { done: props.done,
                      text: props.text
                    };
 
