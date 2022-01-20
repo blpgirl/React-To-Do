@@ -42,7 +42,8 @@ class Todo extends React.Component {
     return <div className="todo">
               <span>
                   <input type="checkbox" checked={this.state.done} onClick={this.handleClick} />
-                  <input type="text" value={this.state.text} onChange={this.handleChange} />
+                  <input type="text" value={this.state.text} onChange={this.handleChange} 
+                  className={(this.state.done)? 'done':'not-done'} />
                 </span>
            </div>;
   }
