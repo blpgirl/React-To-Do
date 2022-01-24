@@ -15,6 +15,8 @@ class Todo extends React.Component {
 
       // onchange event call handleChange function of this class
       this.handleChange = this.handleChange.bind(this);
+      // on submit call handleSubmit function
+      this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleClick(event) {
@@ -22,7 +24,11 @@ class Todo extends React.Component {
     this.setState(
       state => ({
         done: !state.done
-      })
+      }),
+      function(event){
+        // onclick update checkbox state (first part up) and then do submit
+        this.handleSubmit(event)
+      }
     );
   }
 
@@ -35,6 +41,39 @@ class Todo extends React.Component {
     }));
   }
 
+  handleSubmit(event){
+    console.log("Submit logic here");
+
+    let id = this.props.id || this.state._id;
+
+    // if id is not set then is a new task I'm creating
+    if(id == "" || id == undefined){
+      fetch('https://ToDo-REST-API.leyla-maria-bon.repl.co/todos/', {
+          method: 'post',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            done: this.state.done,
+            text: this.state.text
+          })
+        }).then(response => response.json())
+        .then(data => {
+          this.setState(state => ({
+            _id: data._id
+          }));
+        });
+    } else {
+      // update an existing task
+      fetch('https://ToDo-REST-API.leyla-maria-bon.repl.co/todos/'+id, {
+          method: 'put',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            done: this.state.done,
+            text: this.state.text
+          })
+        });
+    } // else
+  } // handleSubmit
+
   render() {
     // drawing a div with class todo and a checkbox inside with
     // the text attribute pass as the text
@@ -43,6 +82,7 @@ class Todo extends React.Component {
               <span>
                   <input type="checkbox" checked={this.state.done} onClick={this.handleClick} />
                   <input type="text" value={this.state.text} onChange={this.handleChange} 
+                  onBlur={this.handleSubmit} 
                   className={(this.state.done)? 'done':'not-done'} />
                 </span>
            </div>;

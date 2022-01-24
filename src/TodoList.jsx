@@ -5,17 +5,22 @@ class TodoList extends React.Component {
   constructor(props){
     super(props);
 
-    this.state = {
-                  todos: [
-                    { id: 1, text: "Item 1", done: false},
-                    { id: 2, text: "Item 2", done: false},
-                    { id: 3, text: "Item 3", done: false},
-                    { id: 4, text: "Item 4", done: false}
-                  ]
-                };
+    this.state = { todos: [] };
 
         this.newTodo = this.newTodo.bind(this);
     } // constructor
+
+    // get the data from the API in nodejs
+    componentDidMount(){
+      console.log("entre al mount aunque ni idea de como");
+        fetch('https://ToDo-REST-API.leyla-maria-bon.repl.co/todos/')
+          .then(response => response.json())
+          .then(data => {
+            this.setState(state => ({
+              todos: data.todos
+            }));
+          });
+      } // componentDidMount
 
   newTodo(event){
     event.preventDefault();
@@ -23,7 +28,7 @@ class TodoList extends React.Component {
     var todos = this.state.todos;
     
     // push a new empty object to the array of ToDos
-    todos.push({ id: "" });
+    todos.push({ _id: "" });
 
     this.setState(state => ({
       todos: todos
@@ -31,8 +36,10 @@ class TodoList extends React.Component {
   } // newTodo
 
   render(){
+    console.log("a ver que obtuve");
+    console.log(this.state.todos);
     const todoList = this.state.todos.map((todo) =>
-      <Todo key={todo.id.toString()} id={todo.id} text={todo.text} done={todo.done} />
+      <Todo key={todo._id.toString()} id={todo._id} text={todo.text} done={todo.done} />
     );
 
     return <React.Fragment>
